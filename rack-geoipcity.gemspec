@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Karol Hosiawa", "Thomas Maurer", "Iain Barnett"]
   s.email       = ["iainspeed@gmail.com"]
-  s.homepage    = "https://github.com/yb66/rack-geoipcity"
+  s.homepage    = "https://github.com/yb66/Rack-GeoIPCity"
   s.summary     = %q{Rack middleware for Geo IP city lookup}
   s.description = %q{Rack::GeoIPCity uses the geoip gem and the GeoIP database to lookup the city of a request by its IP address}
   s.license     = 'MIT'
