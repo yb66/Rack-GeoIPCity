@@ -11,7 +11,7 @@ a) It would be slower
 b) there's already a country gem and 
 c) you can do the branching yourself if you really want, but why would you?
 
-## Usage: ##
+## Usage:
 
 use Rack::GeoIPCity, :db => "path/to/GeoIP.dat"
 
