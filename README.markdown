@@ -29,7 +29,7 @@ X_GEOIP_CITY_NAME if not found set to an empty string
 X_GEOIP_POSTAL_CODE if not found set to an empty string  
 X_GEOIP_LATITUDE if not found won't be returned as I can't think of another good return value to signify "not found"  
 X_GEOIP_LONGITUDE if not found won't be returned as I can't think of another good return value to signify "not found"  
-'X_GEOIP_DMA_CODE' The metropolitan code (this is for the USA, see http://code.google.com/apis/adwords/docs/appendix/metrocodes.html if you're interested), default 0 for not found.  
+X_GEOIP_DMA_CODE The metropolitan code (this is for the USA, see http://code.google.com/apis/adwords/docs/appendix/metrocodes.html if you're interested), default 0 for not found.  
 X_GEOIP_AREA_CODE if not found set to an empty string  
 X_GEOIP_TIMEZONE if not found set to an empty string  
 X_GEOIP_CONTINENT - The two-character continent code, if not found set to an empty string  
