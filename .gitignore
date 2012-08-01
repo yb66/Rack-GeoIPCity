@@ -45,3 +45,4 @@ db/backups/
 config/redis.conf
 Gemfile.lock
 *.gem
+examples/assets/GeoLiteCity.dat
