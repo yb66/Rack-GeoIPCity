@@ -13,7 +13,10 @@ Gem::Specification.new do |s|
   s.description = %q{Rack::GeoIPCity uses the geoip gem and the GeoIP database to lookup the city of a request by its IP address}
   s.license     = 'MIT'
 
+  s.add_dependency 'rack'
   s.add_dependency 'geoip'
+  s.add_development_dependency 'haml'
+  s.add_development_dependency 'wirble'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
