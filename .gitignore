@@ -44,3 +44,4 @@ db/backups/
 *.rdb
 config/redis.conf
 Gemfile.lock
+*.gem
