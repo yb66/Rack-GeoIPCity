@@ -15,9 +15,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rack'
   s.add_dependency 'geoip'
-  s.add_development_dependency 'haml'
-  s.add_development_dependency 'wirble'
-  s.add_development_dependency 'simplecov'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

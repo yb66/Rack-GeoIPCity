@@ -22,10 +22,6 @@ ENV['RACK_ENV'] ||= 'test'
 ENV["EXPECT_WITH"] ||= "racktest"
 
 
-
-require 'ick'
-Ick.sugarize
-
 require "logger"
 logger = Logger.new STDOUT
 logger.level = Logger::DEBUG
