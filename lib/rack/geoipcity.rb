@@ -2,68 +2,51 @@ require 'geoip'
 
 module Rack
   
-  # See the README for more docs
+  # See the README for more docs.
+  # @example
+  #   use Rack::GeoIPCity, :db => "/PATH/TO/GeoLiteCity.dat")
   class GeoIPCity
+
+    # Setting the db. Let the app do this, hands away!
+    # @param [GeoIP] :db
+    def self.db=( db )
+      @db = db
+    end
+
+
+    # Use this from another app, say a Sinatra or Rack app, when you want to use the GeoIP database for something other than the referrer's IP.
+    # @return [GeoIP]
+    def self.db
+      @db
+    end
+
+    # @param [Hash] options
+    # @option options [String] :db Path to the GeoIP database
+    # @option options [#ip] :ips ('Rack::Request.new(env)') An object that responds to `ip` and gives an IP address. You'll probably want to use this when you're developing/testing locally and want to pass in fake addresses to get the GeoIP to fire something other than blanks.
+    # @option options [Regexp] :path
+    # @option options [String] :prefix
     def initialize(app, options = {})
       options[:db] ||= 'GeoIP.dat'
-      @db = GeoIP.new(options[:db])
-      @app = app
+      @ips           = options[:ips]
+      @path          = ->(env){ env['PATH_INFO'].start_with? options[:prefix] } unless options[:prefix].nil?
+      @path          = ->(env){ env['PATH_INFO'] =~ options[:path] } unless options[:path].nil?
+      @path         ||= ->(_){ true }
+      self.class.db  = GeoIP.new(options[:db])
+      @app           = app
     end
-    
-    DEFAULTS = {
-      'X_GEOIP_COUNTRY_CODE' => 0,
-      'X_GEOIP_COUNTRY_CODE3' => 0,
-      'X_GEOIP_COUNTRY' => '',
-      'X_GEOIP_CONTINENT' => '',
-      'X_GEOIP_REGION_NAME' => '',
-      'X_GEOIP_CITY_NAME' => '',
-      'X_GEOIP_POSTAL_CODE' => '' ,
-      'X_GEOIP_LATITUDE' => nil,
-      'X_GEOIP_LONGITUDE' => nil,
-      'X_GEOIP_DMA_CODE' => 0,
-      'X_GEOIP_AREA_CODE' => 0,
-      'X_GEOIP_TIMEZONE' => '',
-    }
-
+  
     def call(env)
-      res = @db.city(env['REMOTE_ADDR'])
-      
-      unless res.nil? # won't bork on local or bad ip's
-        hash = {}
-        hash['X_GEOIP_COUNTRY_CODE'] = res.country_code2 unless res.country_code2.nil?
-        hash['X_GEOIP_COUNTRY_CODE3'] = res.country_code3 unless res.country_code3.nil?
-        hash['X_GEOIP_COUNTRY'] = res.country_name unless res.country_name.nil?
-        hash['X_GEOIP_CONTINENT'] = res.continent_code unless res.continent_code.nil?
-        hash['X_GEOIP_REGION_NAME'] = res.region_name unless res.region_name.nil?
-        hash['X_GEOIP_CITY_NAME'] = res.city_name unless res.city_name.nil?
-        hash['X_GEOIP_POSTAL_CODE'] = res.postal_code unless res.postal_code.nil?
-        hash['X_GEOIP_LATITUDE'] = res.latitude 
-        hash['X_GEOIP_LONGITUDE'] = res.longitude
-        hash['X_GEOIP_DMA_CODE'] = res.dma_code unless res.dma_code.nil?
-        hash['X_GEOIP_AREA_CODE'] = res.area_code unless res.area_code.nil?
-        hash['X_GEOIP_TIMEZONE'] = res.timezone unless res.timezone.nil?
-        
-        hash.delete_if{|k,v| v.nil? } # remove latitude and longitude and any other stragglers
-        env.merge!( DEFAULTS.merge hash )
-      end 
-      
+      if @path.call(env)
+        ips = @ips || Rack::Request.new(env)
+        res = self.class.db.city ips.ip
+        unless res.nil? # won't bork on local or bad ip's
+          h = Hash[ [:country_code2, :country_code3, :country_name, :continent_code, :region_name, :city_name, :postal_code, :latitude, :longitude, :dma_code, :area_code, :timezone, :ip,].map{|x| [ "GEOIP_#{x.upcase}", res.__send__(x) ] } ].delete_if{|k,v| v.nil? }
+          
+          env.merge! h
+        end 
+      end      
       @app.call(env)
     end
-
-    class Mapping
-      def initialize(app, options = {})
-        @app, @prefix = app, /^#{options.delete(:prefix)}/
-        @geoip = GeoIPCity.new(app, options)
-      end
-
-      def call(env)
-        if env['PATH_INFO'] =~ @prefix
-          @geoip.call(env)
-        else
-          @app.call(env)
-        end
-      end
-    end
     
-  end
-end
+  end # GeoIPCity
+end # Rack
