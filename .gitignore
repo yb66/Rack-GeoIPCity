@@ -47,3 +47,4 @@ Gemfile.lock
 *.gem
 examples/assets/GeoLiteCity.dat
 spec/support/assets/GeoLiteCity.dat
+coverage/
