@@ -2,13 +2,20 @@ require 'geoip'
 
 module Rack
   
-  # See the README for more docs
+  # See the README for more docs.
+  # @example
+  #   use Rack::GeoIPCity, :db => "/PATH/TO/GeoLiteCity.dat")
   class GeoIPCity
 
+    # Setting the db. Let the app do this, hands away!
+    # @param [GeoIP] :db
     def self.db=( db )
       @db = db
     end
 
+
+    # Use this from another app, say a Sinatra or Rack app, when you want to use the GeoIP database for something other than the referrer's IP.
+    # @return [GeoIP]
     def self.db
       @db
     end
