@@ -1,3 +1,5 @@
+## Rack GeoIPCity ##
+
 Rack::GeoIPCity uses the geoip gem and the GeoIP database to lookup the geographical info of a request by its IP address.  
 The database can be downloaded from:
 
@@ -11,7 +13,7 @@ a) It would be slower
 b) there's already a country gem and   
 c) you can do the branching yourself if you really want, but why would you?  
 
-## Usage:
+## Usage: ##
 
 use Rack::GeoIPCity, :db => "path/to/GeoIP.dat"
 
@@ -38,6 +40,15 @@ X_GEOIP_CONTINENT - The two-character continent code, if not found set to an emp
 You can use the included Mapping class to trigger lookup only for certain requests by specifying matching path prefix in options, eg:  
 use Rack::GeoIPCity::Mapping, :prefix => '/video_tracking'  
 The above will lookup IP addresses only for requests matching /video_tracking etc.
+
+## Running the specs and examples ##
+
+You'll need a copy of the database, so download it and place it in:
+
+* examples/assets for the examples
+* spec/support/assets for the specs
+
+## License ##
 
 MIT License -   
 Originally by Karol Hosiawa ( http://twitter.com/hosiawak )  
