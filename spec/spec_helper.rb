@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 require 'rspec'
+require 'rspec/its'
 Spec_dir = File.expand_path( File.dirname __FILE__ )
 
 unless Kernel.respond_to?(:require_relative)
@@ -14,7 +15,9 @@ end
 # code coverage
 require 'simplecov'
 SimpleCov.start do
+  add_filter "/bin/"
   add_filter "/vendor/"
+  add_filter "/vendor.noindex/"
 end
 
 require "rack/test"
