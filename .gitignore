@@ -39,6 +39,7 @@ doc/
 .project
 .rspec
 vendor/ruby/
+vendor.noindex
 bin/
 db/backups/
 *.rdb
